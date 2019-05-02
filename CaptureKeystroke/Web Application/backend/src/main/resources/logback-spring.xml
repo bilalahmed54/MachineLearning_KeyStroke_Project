@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty scope="context" name="LOG_APPENDER" source="com.itu.keystroke.log.appender"
+                    defaultValue="fileAppender"/>
+    <springProperty scope="context" name="LOG_FILE" source="com.itu.keystroke.log.file.path"/>
+    <springProperty scope="context" name="LOG_LEVEL" source="com.itu.keystroke.log.level" defaultValue="INFO"/>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+            <Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n</Pattern>
+        </encoder>
+
+    </appender>
+
+    <appender name="fileAppender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--  keep 30 days' worth of history-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n</Pattern>
+        </encoder>
+
+    </appender>
+
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="${LOG_APPENDER}"/>
+    </root>
+
+</configuration>
