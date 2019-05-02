@@ -1,6 +1,8 @@
 package com.itu.keystroke.service.Interface;
 
+import com.itu.keystroke.dto.user.UserDTO;
+
 public interface IUserService {
 
-    public void save();
+    public UserDTO save(String username, String email);
 }

@@ -10,8 +10,11 @@ import java.util.List;
 @Table(name = "user")
 public class User extends BaseDomainModel {
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Keystroke> keystrokes;
@@ -26,6 +29,14 @@ public class User extends BaseDomainModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Keystroke> getKeystrokes() {

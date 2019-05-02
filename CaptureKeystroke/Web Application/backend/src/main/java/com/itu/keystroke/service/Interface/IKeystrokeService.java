@@ -1,6 +1,11 @@
 package com.itu.keystroke.service.Interface;
 
+import com.itu.keystroke.dto.BaseDTO;
+import com.itu.keystroke.dto.keystroke.KeystrokeRequestDTO;
+
+import java.util.List;
+
 public interface IKeystrokeService {
 
-    public void save();
+    public BaseDTO save(String email, String keystrokeType, int enrollmentNumber, List<KeystrokeRequestDTO> keystrokes);
 }
