@@ -1,0 +1,68 @@
+<div nz-row [nzGutter]="16">
+
+    <div nz-col nzSpan="4"></div>
+
+    <div nz-col nzSpan="8">
+
+        <nz-form-item>
+            <nz-form-control>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="type">Select Type </nz-form-label>
+                <nz-radio-group [(ngModel)]="type" (ngModelChange)="typeSelected()" [disabled]="disableTypeRadio">
+                    <label nz-radio nzValue="free">Free Text</label>
+                    <label nz-radio nzValue="fix">Fixed Text</label>
+                </nz-radio-group>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="index >= 1 && type=='free'">
+            <nz-form-control>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="type"><b>Label</b> </nz-form-label>
+                {{freeTextTopics[index-1]}}
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="type=='fix'">
+            <nz-form-control>
+                <nz-form-label [nzSm]="8" [nzXs]="24" nzFor="type"><b>Statement</b> </nz-form-label>
+                {{fixedTextStatement}}
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-control>
+                <nz-form-label [nzSm]="12" nzRequired nzFor="name">
+                    User Keystrokes ({{index}} out of 5)
+                </nz-form-label>
+                <nz-form-label [nzSm]="12" *ngIf="index === 0">
+                    Time Left: 00:00:00
+                </nz-form-label>
+                <nz-form-label [nzSm]="12" *ngIf="index !== 0">
+                    Time Left: 00:00:{{timeLeft}}
+                </nz-form-label>
+                <textarea nz-input placeholder="Please Enter Keystrokes" [(ngModel)]="userTypedKeystrokes"
+                    [nzAutosize]="{ minRows: 4, maxRows: 8 }" [disabled]="disableTextArea"
+                    (keypress)=keystroked($event)>
+                </textarea>
+            </nz-form-control>
+        </nz-form-item>
+
+        <div class="button-right">
+            <button nz-button nzType="primary" (click)="next()" *ngIf="index === 0" [disabled]="disableButtonControl">
+                Start
+            </button>
+
+            <button nz-button nzType="primary" (click)="next()" *ngIf="index > 0 && index <= 4"
+                [disabled]="disableButtonControl">
+                Next
+            </button>
+
+            <button nz-button nzType="primary" (click)="performDraw()" *ngIf="index === 5"
+                [disabled]="disableButtonControl">
+                Done
+            </button>
+        </div>
+    </div>
+
+    <div nz-col nzSpan="4"></div>
+
+</div>

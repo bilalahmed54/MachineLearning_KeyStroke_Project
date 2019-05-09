@@ -1,10 +1,9 @@
 package com.itu.keystroke.model.core;
 
-import com.itu.keystroke.enums.KeystrokeEvent;
-import com.itu.keystroke.enums.KeystrokeType;
-import com.itu.keystroke.model.BaseDomainModel;
-
 import javax.persistence.*;
+import com.itu.keystroke.enums.KeystrokeType;
+import com.itu.keystroke.enums.KeystrokeEvent;
+import com.itu.keystroke.model.BaseDomainModel;
 
 @Entity
 @Table(name = "keystroke")
