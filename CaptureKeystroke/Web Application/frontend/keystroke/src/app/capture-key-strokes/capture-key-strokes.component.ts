@@ -11,8 +11,8 @@ export class CaptureKeyStrokesComponent implements OnInit {
   interval;
   index = 0;
   timeLeft: number;
-  disableTextArea = true;
-  disableTypeRadio = false;
+  showRadioButton = true;
+  disableTextArea = true;  
   disableButtonControl = false;
   private keystrokes: Keystroke[] = [];
   freeTextTopics = ['Sports', 'Politics', 'Machine Learning', 'Data Science', 'Big Data'];
@@ -41,7 +41,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
   }
 
   typeSelected() {
-    this.disableTypeRadio = true;
+    this.showRadioButton = false;
   }
 
   keystroked(keyPressed) {
@@ -56,5 +56,4 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }
