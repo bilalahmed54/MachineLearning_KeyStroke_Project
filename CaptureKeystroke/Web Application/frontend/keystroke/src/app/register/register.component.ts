@@ -6,7 +6,6 @@ import {
   Validators,
   FormBuilder
 } from '@angular/forms';
-import { LocalStorageServiceService } from '../service/storage/local-storage-service.service';
 import { LocalStorageService } from '../service/storage/local-storage.service';
 
 @Component({
