@@ -4,12 +4,12 @@
 
     <div nz-col nzSpan="16">
 
-        <nz-form-item *ngIf="showRadioButton">
+        <nz-form-item>
             <nz-form-control>
-                <nz-form-label nzFor="type">Select Type </nz-form-label>
+                <nz-form-label nzFor="type">Select Type {{showRadioButton}} </nz-form-label>
                 <nz-radio-group [(ngModel)]="type" (ngModelChange)="typeSelected()">
-                    <label nz-radio nzValue="free">Free Text</label>
-                    <label nz-radio nzValue="fixed">Fixed Text</label>
+                    <label nz-radio nzValue="free" [nzDisabled]="!showRadioButton">Free Text</label>
+                    <label nz-radio nzValue="fix" [nzDisabled]="!showRadioButton">Fixed Text</label>
                 </nz-radio-group>
             </nz-form-control>
         </nz-form-item>
@@ -17,7 +17,7 @@
         <nz-form-item *ngIf="!showRadioButton">
             <nz-form-control>
                 <nz-form-label nzFor="type"><b>Keystroke Type</b> </nz-form-label>
-                {{type | uppercase}}
+                {{type | uppercase}} TEXT
             </nz-form-control>
         </nz-form-item>
 
@@ -54,7 +54,7 @@
         </nz-form-item>
 
         <div class="button-right">
-            <button nz-button nzType="primary" (click)="next()" *ngIf="index === 0"
+            <button nz-button nzType="primary" (click)="start()" *ngIf="index === 0"
                 [disabled]="disableButtonControl || showRadioButton">
                 Start
             </button>

@@ -37,7 +37,7 @@ public class KeystrokeService implements IKeystrokeService {
 
             User user = iUserRepository.findByEmail(email);
 
-            KeystrokeType keystrokeTypeEnum = KeystrokeType.valueOf(keystrokeType);
+            KeystrokeType keystrokeTypeEnum = KeystrokeType.valueOf(keystrokeType.toUpperCase());
 
             if (user != null) {
 
@@ -54,7 +54,7 @@ public class KeystrokeService implements IKeystrokeService {
                     KeystrokeEvent keystrokeEventEnum;
 
                     try {
-                        keystrokeEventEnum = KeystrokeEvent.valueOf(keystrokeParams.getKeystrokeEvent());
+                        keystrokeEventEnum = KeystrokeEvent.valueOf(keystrokeParams.getKeystrokeEvent().toUpperCase());
                     } catch (Exception e) {
                         keystrokeEventEnum = KeystrokeEvent.PRESSED;
                     }

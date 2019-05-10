@@ -15,35 +15,64 @@ export class CaptureKeyStrokesComponent implements OnInit {
   timeLeft: number;
   showRadioButton = true;
   disableTextArea = true;
+  timeAllowed: number = 60;
   userTypedKeystrokes: string;
   disableButtonControl = false;
   private keystrokes: Keystroke[] = [];
   freeTextTopics = ['Sports', 'Politics', 'Machine Learning', 'Data Science', 'Big Data'];
-  fixedTextStatement = "Hello My Name is Bilal Ahmed Yaseen. I'm the Student in ITU in MSDS (Data Science) Program.";
+  fixedTextStatement = "The quick brown fox jumps over the lazy dog.";
 
   constructor(private keystrokeService: UserKeystrokesService) {
   }
 
-  next() {
+  start() {
 
     this.index++;
-    this.timeLeft = 10;
     this.disableTextArea = false;
-    this.userTypedKeystrokes = "";    
+    this.timeLeft = this.timeAllowed;
     this.disableButtonControl = true;
+
+    this.interval = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        clearInterval(this.interval);
+        this.disableTextArea = true;
+        this.disableButtonControl = false;
+      }
+    }, 1000);
+  }
+
+  next() {
+
+    // Saving previous response before moving ahead
 
     var params = {
       keystrokeType: this.type,
-      keystrokes: this.keystrokes,
-      enrollmentNumber: this.index,      
-      email: "bilalahmedpu@gmail.com"           
+      enrollmentNumber: this.index,
+      email: "bilalahmedpu@gmail.com",
+      keystrokes: JSON.stringify(this.keystrokes)
     }
 
-    this.keystrokeService.save(params).subscribe(
+    const formData = new FormData();
+
+    formData.append('keystrokeType', this.type);
+    formData.append('enrollmentNumber', this.index.toString());
+    formData.append('email', "bilalahmedpu@gmail.com");
+    formData.append('keystrokes', JSON.stringify(this.keystrokes));
+
+    this.keystrokeService.save(formData).subscribe(
       response => {
         if (response.status === 200) {
 
           console.log('Keystrokes Saved Successfully!');
+
+          this.index++;
+          this.keystrokes = [];
+          this.disableTextArea = false;         
+          this.userTypedKeystrokes = "";
+          this.timeLeft = this.timeAllowed;
+          this.disableButtonControl = true;
 
           this.interval = setInterval(() => {
             if (this.timeLeft > 0) {
@@ -54,13 +83,13 @@ export class CaptureKeyStrokesComponent implements OnInit {
               this.disableButtonControl = false;
             }
           }, 1000);
-          
+
         } else {
           console.log('Keystrokes Save Response: ' + JSON.stringify(response));
         }
       },
       err => {
-        console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err));
+        console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
       }
     );
   }

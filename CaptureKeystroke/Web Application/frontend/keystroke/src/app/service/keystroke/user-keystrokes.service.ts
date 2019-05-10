@@ -14,9 +14,8 @@ export class UserKeystrokesService {
   save(params): Observable<any> {
 
     return this.http.post<any>(environment.apiEndpoint + 'keystroke/save',
-      {},
-      {
-        params: params
-      });
+      params,
+      {}
+    );
   }
 }
