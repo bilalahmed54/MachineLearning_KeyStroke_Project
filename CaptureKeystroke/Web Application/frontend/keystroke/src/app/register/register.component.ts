@@ -6,6 +6,8 @@ import {
   Validators,
   FormBuilder
 } from '@angular/forms';
+import { LocalStorageServiceService } from '../service/storage/local-storage-service.service';
+import { LocalStorageService } from '../service/storage/local-storage.service';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +18,12 @@ export class RegisterComponent implements OnInit {
 
   validateForm: FormGroup;
   failedLogIn = false;
+
+  constructor(private router: Router,
+    private fb: FormBuilder,
+    private registerService: RegisterService,
+    private localStorage: LocalStorageService) {
+  }
 
   submitForm(): void {
 
@@ -32,26 +40,19 @@ export class RegisterComponent implements OnInit {
 
       this.registerService.register(params).subscribe(
         response => {
-          if (response.status === 200) {
+          if (response.status === 200 || response.status === 409) {
             console.log('User: ' + response.user.name + ' Registered Successfully!');
+            this.localStorage.saveEmail(params.email);
             this.router.navigate(['/keystrokes']);
-          } else if (response.status === 409) {
-            this.failedLogIn = true;
-            console.log('Given Email Id is Already Registered!');
           } else {
             console.log('User Registered Successfully: ' + JSON.stringify(response));
           }
         },
         err => {
-          console.log('Some Error Occurred whil Processing Request: ' + JSON.stringify(err));
+          console.log('Some Error Occurred while Processing Request: ' + JSON.stringify(err));
         }
       );
     }
-  }
-
-  constructor(private router: Router,
-    private fb: FormBuilder,
-    private registerService: RegisterService) {
   }
 
   ngOnInit(): void {
