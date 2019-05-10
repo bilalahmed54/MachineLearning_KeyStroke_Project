@@ -3,11 +3,14 @@ package com.itu.keystroke.model.core;
 import javax.persistence.*;
 import com.itu.keystroke.enums.KeystrokeType;
 import com.itu.keystroke.enums.KeystrokeEvent;
-import com.itu.keystroke.model.BaseDomainModel;
 
 @Entity
 @Table(name = "keystroke")
-public class Keystroke extends BaseDomainModel {
+public class Keystroke {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "key_typed", nullable = false)
     private String keyTyped;
