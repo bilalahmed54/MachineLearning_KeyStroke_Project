@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
       this.registerService.register(params).subscribe(
         response => {
           if (response.status === 200 || response.status === 409) {
-            console.log('User: ' + response.user.name + ' Registered Successfully!');
+            console.log('User Enrolled Successfully!');
             this.localStorage.saveEmail(params.email);
             this.router.navigate(['/keystrokes']);
           } else {

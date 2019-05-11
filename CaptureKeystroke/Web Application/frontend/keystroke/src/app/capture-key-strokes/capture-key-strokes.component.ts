@@ -22,7 +22,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
   disableButtonControl = false;
   private keystrokes: Keystroke[] = [];
   freeTextTopics = ['Sports', 'Politics', 'Machine Learning', 'Data Science', 'Big Data'];
-  fixedTextStatement = "The quick brown fox jumps over the lazy dog.";
+  fixedTextStatement = "A quick brown fox jumps over the lazy dog.";
 
   constructor(private router: Router,
     private keystrokeService: UserKeystrokesService,
@@ -51,18 +51,11 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
     // Saving previous response before moving ahead
 
-    var params = {
-      keystrokeType: this.type,
-      enrollmentNumber: this.index,
-      email: this.localStorage.getEmail(),
-      keystrokes: JSON.stringify(this.keystrokes)
-    }
-
     const formData = new FormData();
 
     formData.append('keystrokeType', this.type);
     formData.append('enrollmentNumber', this.index.toString());
-    formData.append('email', "bilalahmedpu@gmail.com");
+    formData.append('email', this.localStorage.getEmail());
     formData.append('keystrokes', JSON.stringify(this.keystrokes));
 
     this.keystrokeService.save(formData).subscribe(
