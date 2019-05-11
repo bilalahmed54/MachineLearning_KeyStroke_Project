@@ -17,7 +17,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
   timeLeft: number;
   showRadioButton = true;
   disableTextArea = true;
-  timeAllowed: number = 60;
+  timeAllowed: number = 20;
   userTypedKeystrokes: string;
   disableButtonControl = false;
   private keystrokes: Keystroke[] = [];
@@ -49,46 +49,55 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
   next() {
 
-    // Saving previous response before moving ahead
+    if (this.index > 5) {
 
-    const formData = new FormData();
+      //show pop-up thank you window
+      //logout option
+      //file storage while creating zip
 
-    formData.append('keystrokeType', this.type);
-    formData.append('enrollmentNumber', this.index.toString());
-    formData.append('email', this.localStorage.getEmail());
-    formData.append('keystrokes', JSON.stringify(this.keystrokes));
+    } else {
 
-    this.keystrokeService.save(formData).subscribe(
-      response => {
-        if (response.status === 200) {
+      // Saving previous response before moving ahead
 
-          console.log('Keystrokes Saved Successfully!');
+      const formData = new FormData();
 
-          this.index++;
-          this.keystrokes = [];
-          this.disableTextArea = false;
-          this.userTypedKeystrokes = "";
-          this.timeLeft = this.timeAllowed;
-          this.disableButtonControl = true;
+      formData.append('keystrokeType', this.type);
+      formData.append('enrollmentNumber', this.index.toString());
+      formData.append('email', this.localStorage.getEmail());
+      formData.append('keystrokes', JSON.stringify(this.keystrokes));
 
-          this.interval = setInterval(() => {
-            if (this.timeLeft > 0) {
-              this.timeLeft--;
-            } else {
-              clearInterval(this.interval);
-              this.disableTextArea = true;
-              this.disableButtonControl = false;
-            }
-          }, 1000);
+      this.keystrokeService.save(formData).subscribe(
+        response => {
+          if (response.status === 200) {
 
-        } else {
-          console.log('Keystrokes Save Response: ' + JSON.stringify(response));
+            console.log('Keystrokes Saved Successfully!');
+
+            this.index++;
+            this.keystrokes = [];
+            this.disableTextArea = false;
+            this.userTypedKeystrokes = "";
+            this.timeLeft = this.timeAllowed;
+            this.disableButtonControl = true;
+
+            this.interval = setInterval(() => {
+              if (this.timeLeft > 0) {
+                this.timeLeft--;
+              } else {
+                clearInterval(this.interval);
+                this.disableTextArea = true;
+                this.disableButtonControl = false;
+              }
+            }, 1000);
+
+          } else {
+            console.log('Keystrokes Save Response: ' + JSON.stringify(response));
+          }
+        },
+        err => {
+          console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
         }
-      },
-      err => {
-        console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
-      }
-    );
+      );
+    }
   }
 
   typeSelected() {
