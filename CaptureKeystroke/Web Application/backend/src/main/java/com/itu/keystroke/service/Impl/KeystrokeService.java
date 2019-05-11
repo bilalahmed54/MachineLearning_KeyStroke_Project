@@ -15,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -86,5 +90,71 @@ public class KeystrokeService implements IKeystrokeService {
         }
 
         return baseDTO;
+    }
+
+    @Override
+    public List<File> download() {
+
+        List<File> files = new ArrayList<>();
+
+        try {
+
+            List<User> users = iUserRepository.findAll();
+
+            for (User user : users) {
+
+                for (int i = 1; i <= 5; i++) {
+
+                    List<Keystroke> keystrokes = iKeystrokeRepository.findAllByUserAndAndRecordNumberAndAndKeystrokeType(user, i, KeystrokeType.FIX);
+
+                    if (keystrokes.size() > 0) {
+
+                        String fileName = user.getId() + "_" + i + "_" + KeystrokeType.FIX.name() + ".txt";
+                        File fout = new File(fileName);
+                        FileOutputStream fos = new FileOutputStream(fout);
+
+                        OutputStreamWriter osw = new OutputStreamWriter(fos);
+
+                        for (Keystroke keystroke : keystrokes) {
+                            String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
+                            osw.write(line);
+                        }
+
+                        osw.close();
+
+                        files.add(fout);
+                    }
+                }
+
+                for (int i = 1; i <= 5; i++) {
+
+                    List<Keystroke> keystrokes = iKeystrokeRepository.findAllByUserAndAndRecordNumberAndAndKeystrokeType(user, i, KeystrokeType.FREE);
+
+                    if (keystrokes.size() > 0) {
+
+                        String fileName = user.getId() + "_" + i + "_" + KeystrokeType.FREE.name() + ".txt";
+                        File fout = new File(fileName);
+                        FileOutputStream fos = new FileOutputStream(fout);
+
+                        OutputStreamWriter osw = new OutputStreamWriter(fos);
+
+                        for (Keystroke keystroke : keystrokes) {
+                            String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
+                            osw.write(line);
+                        }
+
+                        osw.close();
+
+                        files.add(fout);
+                    }
+                }
+            }
+
+        } catch (Exception ex) {
+
+            LOGGER.error("Exception Occurred while Creating Text Files: ", ex);
+        }
+
+        return files;
     }
 }
