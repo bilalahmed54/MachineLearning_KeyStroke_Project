@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Keystroke } from '../domain/keystroke.model';
 import { UserKeystrokesService } from '../service/keystroke/user-keystrokes.service';
+import { LocalStorageService } from '../service/storage/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-capture-key-strokes',
@@ -22,7 +24,9 @@ export class CaptureKeyStrokesComponent implements OnInit {
   freeTextTopics = ['Sports', 'Politics', 'Machine Learning', 'Data Science', 'Big Data'];
   fixedTextStatement = "The quick brown fox jumps over the lazy dog.";
 
-  constructor(private keystrokeService: UserKeystrokesService) {
+  constructor(private router: Router,
+    private keystrokeService: UserKeystrokesService,
+    private localStorage: LocalStorageService) {
   }
 
   start() {
@@ -50,7 +54,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
     var params = {
       keystrokeType: this.type,
       enrollmentNumber: this.index,
-      email: "bilalahmedpu@gmail.com",
+      email: this.localStorage.getEmail(),
       keystrokes: JSON.stringify(this.keystrokes)
     }
 
@@ -69,7 +73,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
           this.index++;
           this.keystrokes = [];
-          this.disableTextArea = false;         
+          this.disableTextArea = false;
           this.userTypedKeystrokes = "";
           this.timeLeft = this.timeAllowed;
           this.disableButtonControl = true;
@@ -109,5 +113,11 @@ export class CaptureKeyStrokesComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    const authEmail = this.localStorage.getEmail();
+
+    if (!authEmail) {
+      this.router.navigate(['/']);
+    }
   }
 }
