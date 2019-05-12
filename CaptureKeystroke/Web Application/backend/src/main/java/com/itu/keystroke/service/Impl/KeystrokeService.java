@@ -1,8 +1,6 @@
 package com.itu.keystroke.service.Impl;
 
 import com.itu.keystroke.dto.BaseDTO;
-import com.itu.keystroke.dto.keystroke.KeystrokeRequestDTO;
-import com.itu.keystroke.enums.KeystrokeEvent;
 import com.itu.keystroke.enums.KeystrokeType;
 import com.itu.keystroke.model.core.Keystroke;
 import com.itu.keystroke.model.core.User;
@@ -33,44 +31,38 @@ public class KeystrokeService implements IKeystrokeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(KeystrokeService.class);
 
     @Override
-    public BaseDTO save(String email, String keystrokeType, int enrollmentNumber, List<KeystrokeRequestDTO> keystrokes) {
+    public BaseDTO save(String email, String keystrokeType, int enrollmentNumber, String keystrokes) {
 
         BaseDTO baseDTO = new BaseDTO();
 
         try {
 
             User user = iUserRepository.findByEmail(email);
-
             KeystrokeType keystrokeTypeEnum = KeystrokeType.valueOf(keystrokeType.toUpperCase());
 
             if (user != null) {
 
-                for (KeystrokeRequestDTO keystrokeParams : keystrokes) {
+                if (keystrokes.length() <= 65_500) {
 
                     Keystroke keystroke = new Keystroke();
 
                     keystroke.setUser(user);
-                    keystroke.setKeystrokeType(keystrokeTypeEnum);
+                    keystroke.setKeyStrokesData(keystrokes);
                     keystroke.setRecordNumber(enrollmentNumber);
-                    keystroke.setKeyTyped(keystrokeParams.getKeyTyped());
-                    keystroke.setTimeStamp(keystrokeParams.getTimeStamp());
-
-                    KeystrokeEvent keystrokeEventEnum;
-
-                    try {
-                        keystrokeEventEnum = KeystrokeEvent.valueOf(keystrokeParams.getKeystrokeEvent().toUpperCase());
-                    } catch (Exception e) {
-                        keystrokeEventEnum = KeystrokeEvent.PRESSED;
-                    }
-
-                    keystroke.setKeystrokeEvent(keystrokeEventEnum);
+                    keystroke.setKeystrokeType(keystrokeTypeEnum);
 
                     iKeystrokeRepository.save(keystroke);
-                }
 
-                baseDTO.setAppErrorCode(200);
-                baseDTO.setStatus(HttpStatus.OK);
-                baseDTO.setMessage("User Keystrokes Saved Successfully.");
+                    baseDTO.setAppErrorCode(200);
+                    baseDTO.setStatus(HttpStatus.OK);
+                    baseDTO.setMessage("User Keystrokes Saved Successfully.");
+
+                } else {
+
+                    baseDTO.setAppErrorCode(400);
+                    baseDTO.setStatus(HttpStatus.BAD_REQUEST);
+                    baseDTO.setMessage("Too Much KeyStrokes Data: " + keystrokes.length());
+                }
 
             } else {
 
@@ -116,8 +108,8 @@ public class KeystrokeService implements IKeystrokeService {
                         OutputStreamWriter osw = new OutputStreamWriter(fos);
 
                         for (Keystroke keystroke : keystrokes) {
-                            String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
-                            osw.write(line);
+                            //String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
+                            //osw.write(line);
                         }
 
                         osw.close();
@@ -139,8 +131,8 @@ public class KeystrokeService implements IKeystrokeService {
                         OutputStreamWriter osw = new OutputStreamWriter(fos);
 
                         for (Keystroke keystroke : keystrokes) {
-                            String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
-                            osw.write(line);
+                            //String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
+                            //osw.write(line);
                         }
 
                         osw.close();

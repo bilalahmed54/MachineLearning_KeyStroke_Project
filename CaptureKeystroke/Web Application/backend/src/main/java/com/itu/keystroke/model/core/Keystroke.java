@@ -1,8 +1,8 @@
 package com.itu.keystroke.model.core;
 
-import javax.persistence.*;
 import com.itu.keystroke.enums.KeystrokeType;
-import com.itu.keystroke.enums.KeystrokeEvent;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "keystroke")
@@ -12,22 +12,16 @@ public class Keystroke {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "key_typed", nullable = false)
-    private String keyTyped;
-
     @Column(name = "record_number")
     private int recordNumber;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "event", nullable = false)
-    private KeystrokeEvent keystrokeEvent;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private KeystrokeType keystrokeType;
 
-    @Column(name = "time_stamp")
-    private long timeStamp;
+    //Supports 65,535 characters - 64 KB
+    @Column(name = "key_strokes_data", columnDefinition = "TEXT")
+    private String keyStrokesData;
 
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
@@ -35,12 +29,12 @@ public class Keystroke {
     public Keystroke() {
     }
 
-    public String getKeyTyped() {
-        return keyTyped;
+    public long getId() {
+        return id;
     }
 
-    public void setKeyTyped(String keyTyped) {
-        this.keyTyped = keyTyped;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getRecordNumber() {
@@ -51,14 +45,6 @@ public class Keystroke {
         this.recordNumber = recordNumber;
     }
 
-    public KeystrokeEvent getKeystrokeEvent() {
-        return keystrokeEvent;
-    }
-
-    public void setKeystrokeEvent(KeystrokeEvent keystrokeEvent) {
-        this.keystrokeEvent = keystrokeEvent;
-    }
-
     public KeystrokeType getKeystrokeType() {
         return keystrokeType;
     }
@@ -67,12 +53,12 @@ public class Keystroke {
         this.keystrokeType = keystrokeType;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    public String getKeyStrokesData() {
+        return keyStrokesData;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setKeyStrokesData(String keyStrokesData) {
+        this.keyStrokesData = keyStrokesData;
     }
 
     public User getUser() {
