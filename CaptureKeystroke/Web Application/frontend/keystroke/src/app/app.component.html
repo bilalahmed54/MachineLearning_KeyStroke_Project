@@ -14,6 +14,29 @@
     </div>
   </div>
 
+  <div nz-col nzSpan="8">
+
+    <div type="flex" align="right" class="logged-in-user"
+         *ngIf="manageTopMenuService.userLoggedIn">
+
+      <nz-avatar type="flex" align="right" nzSize="small" nzIcon="user"></nz-avatar>
+
+      <nz-dropdown>
+
+        <a nz-dropdown>
+          User
+        </a>
+        <ul nz-menu nzSelectable>
+          <li nz-menu-item>
+            <a [routerLink]="" (click)="logout()">Logout</a>
+          </li>
+        </ul>
+
+      </nz-dropdown>
+    </div>
+
+  </div>
+
 </div>
 
 <hr>

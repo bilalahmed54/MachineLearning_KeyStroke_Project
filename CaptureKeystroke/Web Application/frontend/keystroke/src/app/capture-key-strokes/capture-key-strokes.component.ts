@@ -3,6 +3,7 @@ import { Keystroke } from '../domain/keystroke.model';
 import { UserKeystrokesService } from '../service/keystroke/user-keystrokes.service';
 import { LocalStorageService } from '../service/storage/local-storage.service';
 import { Router } from '@angular/router';
+import { ManageTopMenuService } from '../service/utils/manage-top-menu.service';
 
 @Component({
   selector: 'app-capture-key-strokes',
@@ -17,16 +18,17 @@ export class CaptureKeyStrokesComponent implements OnInit {
   timeLeft: number;
   showRadioButton = true;
   disableTextArea = true;
-  timeAllowed: number = 60;
+  timeAllowed: number = 20;
   userTypedKeystrokes: string;
-  disableButtonControl = false;
+  disableButtonControl = true;
   private keystrokes: Keystroke[] = [];
   freeTextTopics = ['Sports', 'Politics', 'Machine Learning', 'Data Science', 'Big Data'];
   fixedTextStatement = "A quick brown fox jumps over the lazy dog.";
 
   constructor(private router: Router,
+    private localStorage: LocalStorageService,
     private keystrokeService: UserKeystrokesService,
-    private localStorage: LocalStorageService) {
+    private manageTopMenuService: ManageTopMenuService) {
   }
 
   start() {
@@ -49,36 +51,38 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
   next() {
 
-    if (this.index > 5) {
+    // Saving previous response before moving ahead
 
-      alert("Thank You for Your Time. Response Recoded!");
+    const formData = new FormData();
 
-      this.localStorage.removeEmail();
-      this.router.navigate(['/']);
+    formData.append('keystrokeType', this.type);
+    formData.append('enrollmentNumber', this.index.toString());
+    formData.append('email', this.localStorage.getEmail());
+    formData.append('keystrokes', JSON.stringify(this.keystrokes));
 
-    } else {
+    this.keystrokeService.save(formData).subscribe(
+      response => {
+        if (response.status === 200) {
 
-      // Saving previous response before moving ahead
+          console.log('Keystrokes Saved Successfully!');
 
-      const formData = new FormData();
+          this.keystrokes = [];
+          this.userTypedKeystrokes = "";
+          this.disableButtonControl = true;
 
-      formData.append('keystrokeType', this.type);
-      formData.append('enrollmentNumber', this.index.toString());
-      formData.append('email', this.localStorage.getEmail());
-      formData.append('keystrokes', JSON.stringify(this.keystrokes));
+          if (this.index >= 5) {
 
-      this.keystrokeService.save(formData).subscribe(
-        response => {
-          if (response.status === 200) {
+            alert("Thank You for Your Time. Your Response has been Recoded!");
 
-            console.log('Keystrokes Saved Successfully!');
+            this.index = 0;
+            this.showRadioButton = true;
+            this.disableTextArea = true;
 
-            this.index++;
-            this.keystrokes = [];
+          } else {
+
+            this.index++;            
             this.disableTextArea = false;
-            this.userTypedKeystrokes = "";
-            this.timeLeft = this.timeAllowed;
-            this.disableButtonControl = true;
+            this.timeLeft = this.timeAllowed;          
 
             this.interval = setInterval(() => {
               if (this.timeLeft > 0) {
@@ -89,20 +93,21 @@ export class CaptureKeyStrokesComponent implements OnInit {
                 this.disableButtonControl = false;
               }
             }, 1000);
-
-          } else {
-            console.log('Keystrokes Save Response: ' + JSON.stringify(response));
           }
-        },
-        err => {
-          console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
+
+        } else {
+          console.log('Keystrokes Save Response: ' + JSON.stringify(response));
         }
-      );
-    }
+      },
+      err => {
+        console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
+      }
+    );
   }
 
   typeSelected() {
     this.showRadioButton = false;
+    this.disableButtonControl = false;
   }
 
   keystroked(keyPressed) {
@@ -121,6 +126,8 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
     if (!authEmail) {
       this.router.navigate(['/']);
+    } else {
+      this.manageTopMenuService.show();
     }
   }
 }

@@ -1,6 +1,9 @@
 package com.itu.keystroke.service.Impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itu.keystroke.dto.BaseDTO;
+import com.itu.keystroke.dto.keystroke.KeystrokeRequestDTO;
 import com.itu.keystroke.enums.KeystrokeType;
 import com.itu.keystroke.model.core.Keystroke;
 import com.itu.keystroke.model.core.User;
@@ -44,18 +47,29 @@ public class KeystrokeService implements IKeystrokeService {
 
                 if (keystrokes.length() <= 65_500) {
 
-                    Keystroke keystroke = new Keystroke();
+                    Keystroke keystrokeFound = iKeystrokeRepository.findFirstByUserAndAndRecordNumberAndAndKeystrokeType(user, enrollmentNumber, keystrokeTypeEnum);
 
-                    keystroke.setUser(user);
-                    keystroke.setKeyStrokesData(keystrokes);
-                    keystroke.setRecordNumber(enrollmentNumber);
-                    keystroke.setKeystrokeType(keystrokeTypeEnum);
+                    if (keystrokeFound == null) {
 
-                    iKeystrokeRepository.save(keystroke);
+                        Keystroke keystroke = new Keystroke();
 
-                    baseDTO.setAppErrorCode(200);
-                    baseDTO.setStatus(HttpStatus.OK);
-                    baseDTO.setMessage("User Keystrokes Saved Successfully.");
+                        keystroke.setUser(user);
+                        keystroke.setKeyStrokesData(keystrokes);
+                        keystroke.setRecordNumber(enrollmentNumber);
+                        keystroke.setKeystrokeType(keystrokeTypeEnum);
+
+                        iKeystrokeRepository.save(keystroke);
+
+                        baseDTO.setAppErrorCode(200);
+                        baseDTO.setStatus(HttpStatus.OK);
+                        baseDTO.setMessage("User Keystrokes Saved Successfully.");
+
+                    } else {
+
+                        baseDTO.setAppErrorCode(409);
+                        baseDTO.setStatus(HttpStatus.CONFLICT);
+                        baseDTO.setMessage("User Keystroke Already Exists!");
+                    }
 
                 } else {
 
@@ -92,24 +106,30 @@ public class KeystrokeService implements IKeystrokeService {
         try {
 
             List<User> users = iUserRepository.findAll();
+            ObjectMapper objectMapper = new ObjectMapper();
 
             for (User user : users) {
 
                 for (int i = 1; i <= 5; i++) {
 
-                    List<Keystroke> keystrokes = iKeystrokeRepository.findAllByUserAndAndRecordNumberAndAndKeystrokeType(user, i, KeystrokeType.FIX);
+                    Keystroke fixedKeyStroke = iKeystrokeRepository.findFirstByUserAndAndRecordNumberAndAndKeystrokeType(user, i, KeystrokeType.FIX);
 
-                    if (keystrokes.size() > 0) {
+                    if (fixedKeyStroke != null) {
 
                         String fileName = user.getId() + "_" + i + "_" + KeystrokeType.FIX.name() + ".txt";
+
                         File fout = new File(fileName);
                         FileOutputStream fos = new FileOutputStream(fout);
 
                         OutputStreamWriter osw = new OutputStreamWriter(fos);
 
-                        for (Keystroke keystroke : keystrokes) {
-                            //String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
-                            //osw.write(line);
+                        List<KeystrokeRequestDTO> keystrokesData = objectMapper.readValue(fixedKeyStroke.getKeyStrokesData(), new TypeReference<List<KeystrokeRequestDTO>>() {
+                        });
+
+                        for (KeystrokeRequestDTO keystrokeData : keystrokesData) {
+
+                            String line = keystrokeData.getKeyTyped() + " " + keystrokeData.getKeystrokeEvent() + " " + keystrokeData.getTimeStamp() + "\n";
+                            osw.write(line);
                         }
 
                         osw.close();
@@ -120,9 +140,9 @@ public class KeystrokeService implements IKeystrokeService {
 
                 for (int i = 1; i <= 5; i++) {
 
-                    List<Keystroke> keystrokes = iKeystrokeRepository.findAllByUserAndAndRecordNumberAndAndKeystrokeType(user, i, KeystrokeType.FREE);
+                    Keystroke freeKeyStroke = iKeystrokeRepository.findFirstByUserAndAndRecordNumberAndAndKeystrokeType(user, i, KeystrokeType.FREE);
 
-                    if (keystrokes.size() > 0) {
+                    if (freeKeyStroke != null) {
 
                         String fileName = user.getId() + "_" + i + "_" + KeystrokeType.FREE.name() + ".txt";
                         File fout = new File(fileName);
@@ -130,9 +150,13 @@ public class KeystrokeService implements IKeystrokeService {
 
                         OutputStreamWriter osw = new OutputStreamWriter(fos);
 
-                        for (Keystroke keystroke : keystrokes) {
-                            //String line = keystroke.getKeyTyped() + " " + keystroke.getKeystrokeEvent().name().toLowerCase() + " " + keystroke.getTimeStamp() + "\n";
-                            //osw.write(line);
+                        List<KeystrokeRequestDTO> keystrokesData = objectMapper.readValue(freeKeyStroke.getKeyStrokesData(), new TypeReference<List<KeystrokeRequestDTO>>() {
+                        });
+
+                        for (KeystrokeRequestDTO keystrokeData : keystrokesData) {
+
+                            String line = keystrokeData.getKeyTyped() + " " + keystrokeData.getKeystrokeEvent() + " " + keystrokeData.getTimeStamp() + "\n";
+                            osw.write(line);
                         }
 
                         osw.close();

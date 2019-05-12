@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface IKeystrokeRepository extends JpaRepository<Keystroke, Long> {
 
-    public List<Keystroke> findAllByUserAndAndRecordNumberAndAndKeystrokeType(User user, int recordNumber, KeystrokeType keystrokeType);
+    public Keystroke findFirstByUserAndAndRecordNumberAndAndKeystrokeType(User user, int recordNumber, KeystrokeType keystrokeType);
 }

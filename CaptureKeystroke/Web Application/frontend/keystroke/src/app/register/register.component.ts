@@ -7,6 +7,7 @@ import {
   FormBuilder
 } from '@angular/forms';
 import { LocalStorageService } from '../service/storage/local-storage.service';
+import { ManageTopMenuService } from '../service/utils/manage-top-menu.service';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +22,8 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router,
     private fb: FormBuilder,
     private registerService: RegisterService,
-    private localStorage: LocalStorageService) {
+    private localStorage: LocalStorageService,
+    private manageTopMenuService: ManageTopMenuService) {
   }
 
   submitForm(): void {
@@ -41,7 +43,8 @@ export class RegisterComponent implements OnInit {
         response => {
           if (response.status === 200 || response.status === 409) {
             console.log('User Enrolled Successfully!');
-            this.localStorage.saveEmail(params.email);
+            this.manageTopMenuService.show();
+            this.localStorage.saveEmail(params.email);            
             this.router.navigate(['/keystrokes']);
           } else {
             console.log('User Registered Successfully: ' + JSON.stringify(response));

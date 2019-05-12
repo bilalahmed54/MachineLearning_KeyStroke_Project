@@ -28,11 +28,6 @@ public class KeystrokeController {
                         @RequestParam(value = "enrollmentNumber", required = false) int enrollmentNumber,
                         @Valid @RequestPart(value = "keystrokes", required = false) String keystrokesData) throws IOException {
 
-        /*ObjectMapper objectMapper = new ObjectMapper();
-
-        List<KeystrokeRequestDTO> keystrokes = objectMapper.readValue(keystrokesStr, new TypeReference<List<KeystrokeRequestDTO>>() {
-        });*/
-
         return iKeystrokeService.save(email, keystrokeType, enrollmentNumber, keystrokesData);
     }
 
@@ -46,7 +41,7 @@ public class KeystrokeController {
 
         //setting headers
         response.setStatus(HttpServletResponse.SC_OK);
-        response.addHeader("Content-Disposition", "attachment; filename=\"test.zip\"");
+        response.addHeader("Content-Disposition", "attachment; filename=\"keystrokes.zip\"");
 
         ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
 
