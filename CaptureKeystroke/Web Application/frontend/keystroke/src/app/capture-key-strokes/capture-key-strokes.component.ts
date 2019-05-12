@@ -62,7 +62,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
     this.keystrokeService.save(formData).subscribe(
       response => {
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 409) {
 
           console.log('Keystrokes Saved Successfully!');
 
@@ -80,9 +80,9 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
           } else {
 
-            this.index++;            
+            this.index++;
             this.disableTextArea = false;
-            this.timeLeft = this.timeAllowed;          
+            this.timeLeft = this.timeAllowed;
 
             this.interval = setInterval(() => {
               if (this.timeLeft > 0) {

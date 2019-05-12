@@ -6,7 +6,7 @@
 
         <nz-form-item>
             <nz-form-control>
-                <nz-form-label nzFor="type">Select Type {{showRadioButton}} </nz-form-label>
+                <nz-form-label nzFor="type"><b> Select Type </b></nz-form-label>
                 <nz-radio-group [(ngModel)]="type" (ngModelChange)="typeSelected()">
                     <label nz-radio nzValue="free" [nzDisabled]="!showRadioButton">Free Text</label>
                     <label nz-radio nzValue="fix" [nzDisabled]="!showRadioButton">Fixed Text</label>
@@ -38,13 +38,13 @@
         <nz-form-item>
             <nz-form-control>
                 <label nzJustify="start">
-                    User Keystrokes ({{index}} out of 5)
+                    <b>User Keystrokes: </b> ({{index}} out of 5)
                 </label>
                 <label *ngIf="index === 0" nzJustify="end" class="label-right">
-                    Time Left: 00:00:00
+                    <b> Time Left: </b> 00:00:00
                 </label>
                 <label *ngIf="index !== 0" nzJustify="end" class="label-right">
-                    Time Left: 00:00:{{timeLeft}}
+                    <b>Time Left: </b> 00:00:{{timeLeft}}
                 </label>
                 <textarea nz-input placeholder="Please Enter Keystrokes" [(ngModel)]="userTypedKeystrokes"
                     [nzAutosize]="{ minRows: 5, maxRows: 8 }" [disabled]="disableTextArea"
@@ -54,8 +54,7 @@
         </nz-form-item>
 
         <div class="button-right">
-            <button nz-button nzType="primary" (click)="start()" *ngIf="index === 0"
-                [disabled]="disableButtonControl">
+            <button nz-button nzType="primary" (click)="start()" *ngIf="index === 0" [disabled]="disableButtonControl">
                 Start
             </button>
 
@@ -64,8 +63,7 @@
                 Next
             </button>
 
-            <button nz-button nzType="primary" (click)="next()" *ngIf="index === 5"
-                [disabled]="disableButtonControl">
+            <button nz-button nzType="primary" (click)="next()" *ngIf="index === 5" [disabled]="disableButtonControl">
                 Done
             </button>
         </div>
