@@ -5,9 +5,11 @@ import { Injectable } from '@angular/core';
 })
 export class ManageTopMenuService {
 
+  testStarted: boolean;
   userLoggedIn: boolean;
 
   constructor() {
+    this.testStarted = false;
     this.userLoggedIn = false;
   }
 
@@ -17,5 +19,13 @@ export class ManageTopMenuService {
 
   show() {
     this.userLoggedIn = true;
+  }
+
+  start() {
+    this.testStarted = true;
+  }
+
+  stop() {
+    this.testStarted = false;
   }
 }

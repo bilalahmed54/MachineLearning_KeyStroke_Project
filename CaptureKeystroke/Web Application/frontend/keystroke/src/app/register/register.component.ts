@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit {
             console.log('User Enrolled Successfully!');
             this.manageTopMenuService.show();
             this.localStorage.saveEmail(params.email);            
-            this.router.navigate(['/keystrokes']);
+            this.router.navigate(['/keystrokes/train']);
           } else {
             console.log('User Registered Successfully: ' + JSON.stringify(response));
           }

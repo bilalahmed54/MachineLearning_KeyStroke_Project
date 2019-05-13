@@ -16,8 +16,7 @@
 
   <div nz-col nzSpan="8">
 
-    <div type="flex" align="right" class="logged-in-user"
-         *ngIf="manageTopMenuService.userLoggedIn">
+    <div type="flex" align="right" class="logged-in-user" *ngIf="manageTopMenuService.userLoggedIn">
 
       <nz-avatar type="flex" align="right" nzSize="small" nzIcon="user"></nz-avatar>
 
@@ -33,6 +32,14 @@
         </ul>
 
       </nz-dropdown>
+    </div>
+
+    <div type="flex" align="right" class="logged-in-user" *ngIf="!manageTopMenuService.userLoggedIn && !manageTopMenuService.testStarted">
+
+      <button nz-button nzType="primary" (click)="test()">
+        <i nz-icon type="poweroff"></i>Test
+      </button>
+
     </div>
 
   </div>

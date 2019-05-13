@@ -18,7 +18,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
   timeLeft: number;
   showRadioButton = true;
   disableTextArea = true;
-  timeAllowed: number = 60;
+  timeAllowed: number = 10;
   userTypedKeystrokes: string;
   disableButtonControl = true;
   private keystrokes: Keystroke[] = [];

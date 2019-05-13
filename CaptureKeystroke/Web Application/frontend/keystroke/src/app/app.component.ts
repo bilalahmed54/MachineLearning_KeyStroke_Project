@@ -15,6 +15,11 @@ export class AppComponent {
               public manageTopMenuService: ManageTopMenuService) {
   }
 
+  test() {
+    this.manageTopMenuService.start();
+    this.router.navigate(['keystrokes/test']);
+  }
+
   logout(): void {
     this.manageTopMenuService.hide();
     this.localStorageService.removeEmail();

@@ -3,6 +3,7 @@ import { Keystroke } from '../domain/keystroke.model';
 import { UserKeystrokesService } from '../service/keystroke/user-keystrokes.service';
 import { LocalStorageService } from '../service/storage/local-storage.service';
 import { Router } from '@angular/router';
+import { ManageTopMenuService } from '../service/utils/manage-top-menu.service';
 
 @Component({
   selector: 'app-test-key-strokes',
@@ -17,7 +18,7 @@ export class TestKeyStrokesComponent implements OnInit {
   timeLeft: number;
   showRadioButton = true;
   disableTextArea = true;
-  timeAllowed: number = 60;
+  timeAllowed: number = 10;
   userTypedKeystrokes: string;
   disableButtonControl = false;
   private keystrokes: Keystroke[] = [];
@@ -25,8 +26,9 @@ export class TestKeyStrokesComponent implements OnInit {
   fixedTextStatement = "A quick brown fox jumps over the lazy dog.";
 
   constructor(private router: Router,
+    private localStorage: LocalStorageService,
     private keystrokeService: UserKeystrokesService,
-    private localStorage: LocalStorageService) {
+    private manageTopMenuService: ManageTopMenuService) {
   }
 
   start() {
@@ -115,11 +117,6 @@ export class TestKeyStrokesComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    const authEmail = this.localStorage.getEmail();
-
-    if (!authEmail) {
-      this.router.navigate(['/']);
-    }
+    this.manageTopMenuService.start();
   }
 }
