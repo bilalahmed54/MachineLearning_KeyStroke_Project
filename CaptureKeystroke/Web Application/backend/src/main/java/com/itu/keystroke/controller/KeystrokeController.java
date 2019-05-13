@@ -66,6 +66,8 @@ public class KeystrokeController {
                 fileInputStream.close();
                 zipOutputStream.closeEntry();
             }
+
+            iKeystrokeService.removeKeystrokeFiles();
         }
 
         zipOutputStream.close();

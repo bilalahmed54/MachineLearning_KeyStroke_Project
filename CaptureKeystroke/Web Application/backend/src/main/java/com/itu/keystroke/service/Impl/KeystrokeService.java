@@ -187,4 +187,30 @@ public class KeystrokeService implements IKeystrokeService {
 
         return files;
     }
+
+    @Override
+    public void removeKeystrokeFiles() {
+
+        try {
+
+            File directory = new File(zipFilesTempDir);
+
+            // Get all files in directory
+
+            File[] files = directory.listFiles();
+
+            if (files != null && files.length > 0) {
+
+                for (File file : files) {
+
+                    if (!file.delete()) {
+                        LOGGER.info("Failed to Delete File: " + file.getName());
+                    }
+                }
+            }
+            
+        } catch (Exception ex) {
+            LOGGER.error("Exception Occurred while Deleting Keystroke Files: ", ex);
+        }
+    }
 }
