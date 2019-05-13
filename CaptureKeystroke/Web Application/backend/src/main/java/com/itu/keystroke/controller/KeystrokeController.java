@@ -48,17 +48,24 @@ public class KeystrokeController {
         // create a list to add files to be zipped
         List<File> files = iKeystrokeService.download();
 
-        // package files
-        for (File file : files) {
+        if (files.size() == 0) {
 
-            //new zip entry and copying inputstream with file to zipOutputStream, after all closing streams
-            zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
-            FileInputStream fileInputStream = new FileInputStream(file);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
-            IOUtils.copy(fileInputStream, zipOutputStream);
+        } else {
 
-            fileInputStream.close();
-            zipOutputStream.closeEntry();
+            // package files
+            for (File file : files) {
+
+                //new zip entry and copying inputstream with file to zipOutputStream, after all closing streams
+                zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
+                FileInputStream fileInputStream = new FileInputStream(file);
+
+                IOUtils.copy(fileInputStream, zipOutputStream);
+
+                fileInputStream.close();
+                zipOutputStream.closeEntry();
+            }
         }
 
         zipOutputStream.close();

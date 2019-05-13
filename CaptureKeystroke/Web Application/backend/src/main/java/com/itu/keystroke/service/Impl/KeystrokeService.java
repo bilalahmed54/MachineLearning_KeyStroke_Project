@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +33,8 @@ public class KeystrokeService implements IKeystrokeService {
 
     @Autowired
     IKeystrokeRepository iKeystrokeRepository;
+
+    private String zipFilesTempDir = System.getProperty("user.home") + File.separator + "keystrokes" + File.separator;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KeystrokeService.class);
 
@@ -105,6 +110,15 @@ public class KeystrokeService implements IKeystrokeService {
 
         try {
 
+            Path directoryPath = Paths.get(zipFilesTempDir);
+
+            try {
+                Files.createDirectories(directoryPath);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return files;
+            }
+
             List<User> users = iUserRepository.findAll();
             ObjectMapper objectMapper = new ObjectMapper();
 
@@ -118,7 +132,7 @@ public class KeystrokeService implements IKeystrokeService {
 
                         String fileName = user.getId() + "_" + i + "_" + KeystrokeType.FIX.name() + ".txt";
 
-                        File fout = new File(fileName);
+                        File fout = new File(zipFilesTempDir, fileName);
                         FileOutputStream fos = new FileOutputStream(fout);
 
                         OutputStreamWriter osw = new OutputStreamWriter(fos);
@@ -145,7 +159,7 @@ public class KeystrokeService implements IKeystrokeService {
                     if (freeKeyStroke != null) {
 
                         String fileName = user.getId() + "_" + i + "_" + KeystrokeType.FREE.name() + ".txt";
-                        File fout = new File(fileName);
+                        File fout = new File(zipFilesTempDir, fileName);
                         FileOutputStream fos = new FileOutputStream(fout);
 
                         OutputStreamWriter osw = new OutputStreamWriter(fos);

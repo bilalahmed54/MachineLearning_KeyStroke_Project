@@ -20,7 +20,7 @@ export class TestKeyStrokesComponent implements OnInit {
   disableTextArea = true;
   timeAllowed: number = 10;
   userTypedKeystrokes: string;
-  disableButtonControl = false;
+  disableButtonControl = true;
   private keystrokes: Keystroke[] = [];
   freeTextTopics = ['Sports', 'Politics', 'Machine Learning', 'Data Science', 'Big Data'];
   fixedTextStatement = "A quick brown fox jumps over the lazy dog.";
@@ -51,35 +51,38 @@ export class TestKeyStrokesComponent implements OnInit {
 
   next() {
 
-    if (this.index > 5) {
+    // Saving previous response before moving ahead
 
-      //show pop-up thank you window
-      //logout option
-      //file storage while creating zip
+    const formData = new FormData();
 
-    } else {
+    formData.append('keystrokeType', this.type);
+    formData.append('enrollmentNumber', this.index.toString());
+    formData.append('email', this.localStorage.getEmail());
+    formData.append('keystrokes', JSON.stringify(this.keystrokes));
 
-      // Saving previous response before moving ahead
+    this.keystrokeService.save(formData).subscribe(
+      response => {
+        if (response.status === 200 || response.status === 409) {
 
-      const formData = new FormData();
+          console.log('Keystrokes Saved Successfully!');
 
-      formData.append('keystrokeType', this.type);
-      formData.append('enrollmentNumber', this.index.toString());
-      formData.append('email', this.localStorage.getEmail());
-      formData.append('keystrokes', JSON.stringify(this.keystrokes));
+          this.keystrokes = [];
+          this.userTypedKeystrokes = "";
+          this.disableButtonControl = true;
 
-      this.keystrokeService.save(formData).subscribe(
-        response => {
-          if (response.status === 200) {
+          if (this.index >= 5) {
 
-            console.log('Keystrokes Saved Successfully!');
+            alert("Thank You for Your Time. Your Response has been Recoded!");
+
+            this.index = 0;
+            this.showRadioButton = true;
+            this.disableTextArea = true;
+
+          } else {
 
             this.index++;
-            this.keystrokes = [];
             this.disableTextArea = false;
-            this.userTypedKeystrokes = "";
             this.timeLeft = this.timeAllowed;
-            this.disableButtonControl = true;
 
             this.interval = setInterval(() => {
               if (this.timeLeft > 0) {
@@ -90,20 +93,21 @@ export class TestKeyStrokesComponent implements OnInit {
                 this.disableButtonControl = false;
               }
             }, 1000);
-
-          } else {
-            console.log('Keystrokes Save Response: ' + JSON.stringify(response));
           }
-        },
-        err => {
-          console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
+
+        } else {
+          console.log('Keystrokes Save Response: ' + JSON.stringify(response));
         }
-      );
-    }
+      },
+      err => {
+        console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
+      }
+    );
   }
 
   typeSelected() {
     this.showRadioButton = false;
+    this.disableButtonControl = false;
   }
 
   keystroked(keyPressed) {
@@ -117,6 +121,13 @@ export class TestKeyStrokesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.manageTopMenuService.start();
+
+    const authEmail = this.localStorage.getEmail();
+
+    if (!authEmail) {
+      this.router.navigate(['/']);
+    } else {
+      this.manageTopMenuService.show();
+    }
   }
 }
