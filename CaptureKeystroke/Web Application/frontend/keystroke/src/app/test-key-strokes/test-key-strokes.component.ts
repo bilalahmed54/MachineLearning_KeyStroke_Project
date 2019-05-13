@@ -5,11 +5,11 @@ import { LocalStorageService } from '../service/storage/local-storage.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-capture-key-strokes',
-  templateUrl: './capture-key-strokes.component.html',
-  styleUrls: ['./capture-key-strokes.component.scss']
+  selector: 'app-test-key-strokes',
+  templateUrl: './test-key-strokes.component.html',
+  styleUrls: ['./test-key-strokes.component.scss']
 })
-export class CaptureKeyStrokesComponent implements OnInit {
+export class TestKeyStrokesComponent implements OnInit {
 
   interval;
   index = 0;

@@ -11,6 +11,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { RegisterComponent } from './register/register.component';
 import { CaptureKeyStrokesComponent } from './capture-key-strokes/capture-key-strokes.component';
+import { TestKeyStrokesComponent } from './test-key-strokes/test-key-strokes.component';
 
 registerLocaleData(en);
 
@@ -18,7 +19,8 @@ registerLocaleData(en);
   declarations: [
     AppComponent,
     RegisterComponent,
-    CaptureKeyStrokesComponent
+    TestKeyStrokesComponent,
+    CaptureKeyStrokesComponent    
   ],
   imports: [
     FormsModule,
