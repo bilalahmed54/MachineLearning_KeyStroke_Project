@@ -43,14 +43,9 @@ export class RegisterComponent implements OnInit {
         response => {
           if (response.status === 200 || response.status === 409) {
             console.log('User Enrolled Successfully!');
-<<<<<<< Updated upstream
             this.manageTopMenuService.show();
             this.localStorage.saveEmail(params.email);            
             this.router.navigate(['/keystrokes']);
-=======
-            this.localStorage.saveEmail(params.email);
-            this.router.navigate(['/keystrokes/train']);
->>>>>>> Stashed changes
           } else {
             console.log('User Registered Successfully: ' + JSON.stringify(response));
           }

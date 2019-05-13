@@ -53,14 +53,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
     // Saving previous response before moving ahead
 
-<<<<<<< Updated upstream
     const formData = new FormData();
-=======
-      alert("Thank You for Your Time. Response Recoded!");
-
-      this.localStorage.removeEmail();
-      this.router.navigate(['/']);
->>>>>>> Stashed changes
 
     formData.append('keystrokeType', this.type);
     formData.append('enrollmentNumber', this.index.toString());
