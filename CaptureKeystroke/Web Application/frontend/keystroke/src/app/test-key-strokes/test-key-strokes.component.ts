@@ -60,49 +60,37 @@ export class TestKeyStrokesComponent implements OnInit {
     formData.append('email', this.localStorage.getEmail());
     formData.append('keystrokes', JSON.stringify(this.keystrokes));
 
-    this.keystrokeService.save(formData).subscribe(
-      response => {
-        if (response.status === 200 || response.status === 409) {
 
-          console.log('Keystrokes Saved Successfully!');
+    console.log('Keystrokes Saved Successfully!');
 
-          this.keystrokes = [];
-          this.userTypedKeystrokes = "";
-          this.disableButtonControl = true;
+    this.keystrokes = [];
+    this.userTypedKeystrokes = "";
+    this.disableButtonControl = true;
 
-          if (this.index >= 5) {
+    if (this.index >= 5) {
 
-            alert("Thank You for Your Time. Your Response has been Recoded!");
+      alert("Thank You for Your Time. Your Response has been Recoded!");
 
-            this.index = 0;
-            this.showRadioButton = true;
-            this.disableTextArea = true;
+      this.index = 0;
+      this.showRadioButton = true;
+      this.disableTextArea = true;
 
-          } else {
+    } else {
 
-            this.index++;
-            this.disableTextArea = false;
-            this.timeLeft = this.timeAllowed;
+      this.index++;
+      this.disableTextArea = false;
+      this.timeLeft = this.timeAllowed;
 
-            this.interval = setInterval(() => {
-              if (this.timeLeft > 0) {
-                this.timeLeft--;
-              } else {
-                clearInterval(this.interval);
-                this.disableTextArea = true;
-                this.disableButtonControl = false;
-              }
-            }, 1000);
-          }
-
+      this.interval = setInterval(() => {
+        if (this.timeLeft > 0) {
+          this.timeLeft--;
         } else {
-          console.log('Keystrokes Save Response: ' + JSON.stringify(response));
+          clearInterval(this.interval);
+          this.disableTextArea = true;
+          this.disableButtonControl = false;
         }
-      },
-      err => {
-        console.log('Some Error Occurred while Saving Keystrokes: ' + JSON.stringify(err.error.message));
-      }
-    );
+      }, 1000);
+    }
   }
 
   typeSelected() {
