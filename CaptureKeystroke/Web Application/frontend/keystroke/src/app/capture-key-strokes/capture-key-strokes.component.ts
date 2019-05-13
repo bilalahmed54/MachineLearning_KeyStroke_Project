@@ -51,9 +51,10 @@ export class CaptureKeyStrokesComponent implements OnInit {
 
     if (this.index > 5) {
 
-      //show pop-up thank you window
-      //logout option
-      //file storage while creating zip
+      alert("Thank You for Your Time. Response Recoded!");
+
+      this.localStorage.removeEmail();
+      this.router.navigate(['/']);
 
     } else {
 
