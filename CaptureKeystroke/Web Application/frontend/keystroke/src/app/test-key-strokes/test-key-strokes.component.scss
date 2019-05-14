@@ -6,3 +6,25 @@
 .label-right {
     float: right;
 }
+
+.border-right {
+    border-right: 1px solid lightgray;
+}
+
+.border-bottom {
+    border-bottom: 1px solid lightgray;
+}
+
+.border-left {
+    border-left: 1px solid lightgray;
+}
+
+.yes {
+    color: green;
+    font: 16px;
+}
+
+.no {
+    color: red;
+    font: 16px
+}

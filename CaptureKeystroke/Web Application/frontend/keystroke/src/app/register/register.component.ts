@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
           if (response.status === 200 || response.status === 409) {
             console.log('User Enrolled Successfully!');
             this.manageTopMenuService.show();
-            this.localStorage.saveEmail(params.email);            
+            this.localStorage.saveEmail(params.email);
             this.router.navigate(['/keystrokes/train']);
           } else {
             console.log('User Registered Successfully: ' + JSON.stringify(response));
@@ -58,9 +58,20 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      name: [null, [Validators.required]],
-      email: [null, [Validators.email, Validators.required]]
-    });
+
+    const authEmail = this.localStorage.getEmail();
+
+    if (authEmail) {
+
+      this.manageTopMenuService.show();      
+      this.router.navigate(['/keystrokes/train']);
+
+    } else {
+
+      this.validateForm = this.fb.group({
+        name: [null, [Validators.required]],
+        email: [null, [Validators.email, Validators.required]]
+      });
+    }
   }
 }

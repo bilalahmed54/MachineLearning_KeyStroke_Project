@@ -18,7 +18,7 @@ export class TestKeyStrokesComponent implements OnInit {
   timeLeft: number;
   showRadioButton = true;
   disableTextArea = true;
-  timeAllowed: number = 10;
+  timeAllowed: number = 60;
   userTypedKeystrokes: string;
   disableButtonControl = true;
   private keystrokes: Keystroke[] = [];
@@ -49,7 +49,7 @@ export class TestKeyStrokesComponent implements OnInit {
     }, 1000);
   }
 
-  next() {
+  testKeyStrokes() {
 
     // Saving previous response before moving ahead
 
@@ -60,37 +60,14 @@ export class TestKeyStrokesComponent implements OnInit {
     formData.append('email', this.localStorage.getEmail());
     formData.append('keystrokes', JSON.stringify(this.keystrokes));
 
-
     console.log('Keystrokes Saved Successfully!');
 
+    this.index = 0;
     this.keystrokes = [];
+    this.showRadioButton = true;
+    this.disableTextArea = true;
     this.userTypedKeystrokes = "";
     this.disableButtonControl = true;
-
-    if (this.index >= 5) {
-
-      alert("Thank You for Your Time. Your Response has been Recoded!");
-
-      this.index = 0;
-      this.showRadioButton = true;
-      this.disableTextArea = true;
-
-    } else {
-
-      this.index++;
-      this.disableTextArea = false;
-      this.timeLeft = this.timeAllowed;
-
-      this.interval = setInterval(() => {
-        if (this.timeLeft > 0) {
-          this.timeLeft--;
-        } else {
-          clearInterval(this.interval);
-          this.disableTextArea = true;
-          this.disableButtonControl = false;
-        }
-      }, 1000);
-    }
   }
 
   typeSelected() {
@@ -109,13 +86,6 @@ export class TestKeyStrokesComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    const authEmail = this.localStorage.getEmail();
-
-    if (!authEmail) {
-      this.router.navigate(['/']);
-    } else {
-      this.manageTopMenuService.show();
-    }
+    this.manageTopMenuService.start();
   }
 }
