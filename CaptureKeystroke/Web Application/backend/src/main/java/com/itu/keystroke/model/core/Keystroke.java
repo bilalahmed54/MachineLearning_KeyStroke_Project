@@ -1,5 +1,6 @@
 package com.itu.keystroke.model.core;
 
+import com.itu.keystroke.enums.KeystrokeMode;
 import com.itu.keystroke.enums.KeystrokeType;
 
 import javax.persistence.*;
@@ -18,6 +19,10 @@ public class Keystroke {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private KeystrokeType keystrokeType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mode", nullable = false)
+    private KeystrokeMode keyStrokeMode;
 
     //Supports 65,535 characters - 64 KB
     @Column(name = "key_strokes_data", columnDefinition = "TEXT")
@@ -51,6 +56,14 @@ public class Keystroke {
 
     public void setKeystrokeType(KeystrokeType keystrokeType) {
         this.keystrokeType = keystrokeType;
+    }
+
+    public KeystrokeMode getKeyStrokeMode() {
+        return keyStrokeMode;
+    }
+
+    public void setKeyStrokeMode(KeystrokeMode keyStrokeMode) {
+        this.keyStrokeMode = keyStrokeMode;
     }
 
     public String getKeyStrokesData() {

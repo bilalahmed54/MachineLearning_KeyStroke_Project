@@ -56,6 +56,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
     const formData = new FormData();
 
     formData.append('keystrokeType', this.type);
+    formData.append('keystrokeMode', "TRAIN");
     formData.append('enrollmentNumber', this.index.toString());
     formData.append('email', this.localStorage.getEmail());
     formData.append('keystrokes', JSON.stringify(this.keystrokes));
@@ -96,7 +97,7 @@ export class CaptureKeyStrokesComponent implements OnInit {
           }
 
         } else {
-          console.log('Keystrokes Save Response: ' + JSON.stringify(response));
+          console.log('Train Keystrokes Save Response: ' + JSON.stringify(response));
         }
       },
       err => {

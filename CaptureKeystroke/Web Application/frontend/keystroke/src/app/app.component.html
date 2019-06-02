@@ -42,6 +42,14 @@
 
     </div>
 
+    <div type="flex" align="right" class="logged-in-user" *ngIf="!manageTopMenuService.userLoggedIn && manageTopMenuService.testStarted">
+
+      <button nz-button nzType="primary" (click)="train()">
+        <i nz-icon type="poweroff"></i>Train
+      </button>
+
+    </div>
+
   </div>
 
 </div>

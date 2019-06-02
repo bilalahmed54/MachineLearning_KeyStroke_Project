@@ -55,19 +55,29 @@ export class TestKeyStrokesComponent implements OnInit {
 
     const formData = new FormData();
 
+    formData.append('keystrokeMode', "TEST");
+    formData.append('enrollmentNumber', "-1");
     formData.append('keystrokeType', this.type);
-    formData.append('enrollmentNumber', this.index.toString());
-    formData.append('email', this.localStorage.getEmail());
     formData.append('keystrokes', JSON.stringify(this.keystrokes));
 
-    console.log('Keystrokes Saved Successfully!');
+    this.keystrokeService.save(formData).subscribe(
+      response => {
+        if (response.status === 200 || response.status === 409) {
 
-    this.index = 0;
-    this.keystrokes = [];
-    this.showRadioButton = true;
-    this.disableTextArea = true;
-    this.userTypedKeystrokes = "";
-    this.disableButtonControl = true;
+          this.index = 0;
+          this.keystrokes = [];
+          this.showRadioButton = true;
+          this.disableTextArea = true;
+          this.userTypedKeystrokes = "";
+          this.disableButtonControl = true;
+
+          console.log('Test Keystrokes Saved Successfully: ' + JSON.stringify(response));
+        }
+      },
+      err => {
+        console.log('Some Error Occurred while Saving Test Keystrokes: ' + JSON.stringify(err.error.message));
+      }
+    );
   }
 
   typeSelected() {

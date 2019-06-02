@@ -20,6 +20,11 @@ export class AppComponent {
     this.router.navigate(['keystrokes/test']);
   }
 
+  train() {
+    this.manageTopMenuService.stop();
+    this.router.navigate(['keystrokes/train']);
+  }
+
   logout(): void {
     this.manageTopMenuService.hide();
     this.localStorageService.removeEmail();

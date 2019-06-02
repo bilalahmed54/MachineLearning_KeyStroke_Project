@@ -9,5 +9,5 @@ public interface IKeystrokeService {
 
     public List<File> download();
     public void removeKeystrokeFiles();
-    public BaseDTO save(String email, String keystrokeType, int enrollmentNumber, String keystrokes);
+    public BaseDTO save(String email, String keystrokeType, String keystrokeMode, int enrollmentNumber, String keystrokes);
 }

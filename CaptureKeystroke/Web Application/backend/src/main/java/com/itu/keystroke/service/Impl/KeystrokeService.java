@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itu.keystroke.dto.BaseDTO;
 import com.itu.keystroke.dto.keystroke.KeystrokeRequestDTO;
+import com.itu.keystroke.enums.KeystrokeMode;
 import com.itu.keystroke.enums.KeystrokeType;
 import com.itu.keystroke.model.core.Keystroke;
 import com.itu.keystroke.model.core.User;
@@ -39,27 +40,31 @@ public class KeystrokeService implements IKeystrokeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(KeystrokeService.class);
 
     @Override
-    public BaseDTO save(String email, String keystrokeType, int enrollmentNumber, String keystrokes) {
+    public BaseDTO save(String email, String keystrokeType, String keystrokeModeStr, int enrollmentNumber, String keystrokes) {
 
         BaseDTO baseDTO = new BaseDTO();
+        Keystroke keystrokeFound = null;
+        boolean isTraining = keystrokeModeStr.equalsIgnoreCase("train");
 
         try {
 
             User user = iUserRepository.findByEmail(email);
+            KeystrokeMode keystrokeMode = KeystrokeMode.valueOf(keystrokeModeStr.toUpperCase());
             KeystrokeType keystrokeTypeEnum = KeystrokeType.valueOf(keystrokeType.toUpperCase());
 
-            if (user != null) {
+            if (user != null || isTraining) {
 
                 if (keystrokes.length() <= 65_500) {
 
-                    Keystroke keystrokeFound = iKeystrokeRepository.findFirstByUserAndAndRecordNumberAndAndKeystrokeType(user, enrollmentNumber, keystrokeTypeEnum);
+                    keystrokeFound = iKeystrokeRepository.findFirstByUserAndAndRecordNumberAndAndKeystrokeType(user, enrollmentNumber, keystrokeTypeEnum);
 
-                    if (keystrokeFound == null) {
+                    if (keystrokeFound == null || isTraining) {
 
                         Keystroke keystroke = new Keystroke();
 
                         keystroke.setUser(user);
                         keystroke.setKeyStrokesData(keystrokes);
+                        keystroke.setKeyStrokeMode(keystrokeMode);
                         keystroke.setRecordNumber(enrollmentNumber);
                         keystroke.setKeystrokeType(keystrokeTypeEnum);
 

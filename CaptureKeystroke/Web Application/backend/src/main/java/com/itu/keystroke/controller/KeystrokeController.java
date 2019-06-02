@@ -24,11 +24,12 @@ public class KeystrokeController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public BaseDTO save(@RequestParam(value = "email", required = false) String email,
-                        @RequestParam(value = "keystrokeType", required = false) String keystrokeType,
+                        @RequestParam(value = "keystrokeType", required = true) String keystrokeType,
+                        @RequestParam(value = "keystrokeMode", required = true) String keystrokeMode,
                         @RequestParam(value = "enrollmentNumber", required = false) int enrollmentNumber,
-                        @Valid @RequestPart(value = "keystrokes", required = false) String keystrokesData) throws IOException {
+                        @Valid @RequestPart(value = "keystrokes", required = true) String keystrokesData) throws IOException {
 
-        return iKeystrokeService.save(email, keystrokeType, enrollmentNumber, keystrokesData);
+        return iKeystrokeService.save(email, keystrokeType, keystrokeMode, enrollmentNumber, keystrokesData);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
