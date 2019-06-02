@@ -74,8 +74,9 @@ export class CaptureKeyStrokesComponent implements OnInit {
           if (this.index >= 5) {
 
             alert("Thank You for Your Time. Your Response has been Recoded!");
-
+            
             this.index = 0;
+            this.type = null;
             this.showRadioButton = true;
             this.disableTextArea = true;
 

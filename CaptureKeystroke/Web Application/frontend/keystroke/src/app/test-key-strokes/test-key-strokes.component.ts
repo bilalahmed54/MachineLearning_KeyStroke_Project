@@ -33,7 +33,7 @@ export class TestKeyStrokesComponent implements OnInit {
 
   start() {
 
-    this.index++;
+    this.index = 1;
     this.disableTextArea = false;
     this.timeLeft = this.timeAllowed;
     this.disableButtonControl = true;
@@ -65,6 +65,7 @@ export class TestKeyStrokesComponent implements OnInit {
         if (response.status === 200 || response.status === 409) {
 
           this.index = 0;
+          this.type = null;
           this.keystrokes = [];
           this.showRadioButton = true;
           this.disableTextArea = true;
@@ -72,6 +73,7 @@ export class TestKeyStrokesComponent implements OnInit {
           this.disableButtonControl = true;
 
           console.log('Test Keystrokes Saved Successfully: ' + JSON.stringify(response));
+          alert("Thank You for Your Time. Your Response has been Recoded!");
         }
       },
       err => {

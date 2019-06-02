@@ -26,7 +26,7 @@
         <nz-form-item *ngIf="index >= 1 && type=='free'">
             <nz-form-control>
                 <nz-form-label nzFor="type"><b>Label</b> </nz-form-label>
-                {{freeTextTopics[index-1]}}
+                {{freeTextTopics[2]}}
             </nz-form-control>
         </nz-form-item>
 
@@ -38,10 +38,7 @@
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-control>
-                <label nzJustify="start">
-                    User Keystrokes ({{index}} out of 5)
-                </label>
+            <nz-form-control>            
                 <label *ngIf="index === 0" nzJustify="end" class="label-right">
                     Time Left: 00:00:00
                 </label>

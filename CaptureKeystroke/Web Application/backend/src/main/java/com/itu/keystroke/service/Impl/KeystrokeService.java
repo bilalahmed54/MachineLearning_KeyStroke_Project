@@ -44,7 +44,7 @@ public class KeystrokeService implements IKeystrokeService {
 
         BaseDTO baseDTO = new BaseDTO();
         Keystroke keystrokeFound = null;
-        boolean isTraining = keystrokeModeStr.equalsIgnoreCase("train");
+        boolean isTesting = keystrokeModeStr.equalsIgnoreCase("test");
 
         try {
 
@@ -52,13 +52,13 @@ public class KeystrokeService implements IKeystrokeService {
             KeystrokeMode keystrokeMode = KeystrokeMode.valueOf(keystrokeModeStr.toUpperCase());
             KeystrokeType keystrokeTypeEnum = KeystrokeType.valueOf(keystrokeType.toUpperCase());
 
-            if (user != null || isTraining) {
+            if (user != null || isTesting) {
 
                 if (keystrokes.length() <= 65_500) {
 
                     keystrokeFound = iKeystrokeRepository.findFirstByUserAndAndRecordNumberAndAndKeystrokeType(user, enrollmentNumber, keystrokeTypeEnum);
 
-                    if (keystrokeFound == null || isTraining) {
+                    if (keystrokeFound == null || isTesting) {
 
                         Keystroke keystroke = new Keystroke();
 
